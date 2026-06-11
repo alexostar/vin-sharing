@@ -1,0 +1,365 @@
+/* ————————————————————————————————————————————————
+   Náttúrugáttin · kynningarvefur
+   Palette: glacial paper, moss & birch greens, basalt ink
+   ———————————————————————————————————————————————— */
+
+:root {
+  --paper:      #f4f1e8;
+  --paper-deep: #ece8db;
+  --ink:        #1d2a22;
+  --ink-soft:   #4a5a4e;
+  --moss:       #2c5e3f;
+  --moss-deep:  #1e4530;
+  --lichen:     #8fa86b;
+  --gold:       #b58e3f;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Albert Sans", "Helvetica Neue", sans-serif;
+
+  /* Phone geometry — screen aspect ratio is 1170:2532 */
+  --screen-h: min(68vh, 640px);
+  --screen-w: calc(var(--screen-h) * 0.4621);
+  --screen-r: calc(var(--screen-w) * 0.125);
+  --bezel: 11px;
+
+  --header-h: 60px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* —— atmosphere: faint topographic contours + grain ——————— */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640'%3E%3Cg fill='none' stroke='%232c5e3f' stroke-opacity='0.055' stroke-width='1.2'%3E%3Cpath d='M-40 120 C 120 40, 260 200, 420 130 S 660 60, 720 140'/%3E%3Cpath d='M-40 170 C 130 90, 270 250, 430 180 S 670 110, 720 190'/%3E%3Cpath d='M-40 220 C 140 140, 280 300, 440 230 S 680 160, 720 240'/%3E%3Cpath d='M-40 430 C 100 360, 240 500, 400 440 S 640 380, 720 450'/%3E%3Cpath d='M-40 480 C 110 410, 250 550, 410 490 S 650 430, 720 500'/%3E%3Cpath d='M-40 530 C 120 460, 260 600, 420 540 S 660 480, 720 550'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 640px 640px;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.45 0 0 0 0 0.42 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* —— header ———————————————————————————————————————— */
+
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 4vw, 48px);
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid color-mix(in srgb, var(--moss) 14%, transparent);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--moss);
+}
+.brand-mark svg { width: 100%; height: 100%; }
+
+.brand-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.22rem;
+  letter-spacing: 0.01em;
+  color: var(--moss-deep);
+}
+
+.brand-ngo {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.scroll-progress {
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  z-index: 40;
+  height: 2px;
+  background: transparent;
+}
+.scroll-progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--moss), var(--lichen));
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+/* —— scrollytelling layout ————————————————————————— */
+
+main { position: relative; z-index: 1; }
+
+.scrolly {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+}
+
+.phone-col { position: relative; }
+
+.phone-sticky {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+/* —— the iPhone ———————————————————————————————————— */
+
+.phone {
+  position: relative;
+  padding: var(--bezel);
+  border-radius: calc(var(--screen-r) + var(--bezel));
+  background: linear-gradient(160deg, #3c4044 0%, #17191b 30%, #0d0e0f 70%, #2a2d30 100%);
+  box-shadow:
+    0 2px 6px rgba(29, 42, 34, 0.18),
+    0 24px 48px -16px rgba(29, 42, 34, 0.38),
+    0 60px 90px -40px rgba(29, 42, 34, 0.30),
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.07);
+}
+
+.screen {
+  position: relative;
+  width: var(--screen-w);
+  height: var(--screen-h);
+  border-radius: var(--screen-r);
+  overflow: hidden;
+  background: #0a0c0a;
+  /* hairline between glass and bezel */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.65);
+}
+
+.shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.015);
+  transition: opacity 0.55s ease, transform 0.7s ease;
+}
+.shot.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44%;
+  height: calc(var(--screen-h) * 0.034);
+  background: #000;
+  border-radius: 0 0 14px 14px;
+  z-index: 2;
+}
+
+.btn-power, .btn-vol {
+  position: absolute;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #3a3d40, #1b1d1f);
+}
+.btn-power { right: -3px; top: 24%; height: 9%; }
+.btn-vol   { left: -3px; }
+.vol-1 { top: 20%; height: 6%; }
+.vol-2 { top: 28%; height: 6%; }
+
+.phone-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.caption-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--moss);
+}
+.caption-sep, .caption-total { opacity: 0.55; font-size: 0.78rem; }
+.caption-title {
+  margin-left: 6px;
+  padding-left: 14px;
+  border-left: 1px solid color-mix(in srgb, var(--moss) 30%, transparent);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* —— text steps ————————————————————————————————————— */
+
+.steps-col {
+  padding-left: clamp(24px, 6vw, 88px);
+}
+
+.step {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 26rem;
+  opacity: 0.25;
+  transition: opacity 0.45s ease;
+}
+.step.is-active { opacity: 1; }
+
+.step:first-child { min-height: calc(100vh - var(--header-h)); }
+
+.step-num {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 4vw, 3.4rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.2px color-mix(in srgb, var(--moss) 55%, transparent);
+  margin-bottom: 18px;
+}
+
+.step-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.7rem, 2.6vw, 2.2rem);
+  line-height: 1.15;
+  color: var(--moss-deep);
+  margin-bottom: 16px;
+}
+
+.step-title::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 14px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--lichen), transparent);
+}
+
+.step-text {
+  font-size: 1.02rem;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+/* —— footer ————————————————————————————————————————— */
+
+.site-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 40px clamp(20px, 4vw, 48px) 48px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  border-top: 1px solid color-mix(in srgb, var(--moss) 14%, transparent);
+  background: var(--paper-deep);
+}
+.footer-sep { color: var(--lichen); }
+
+/* —— mobile ————————————————————————————————————————— */
+
+@media (max-width: 860px) {
+  :root {
+    --screen-h: min(46vh, 440px);
+    --header-h: 52px;
+  }
+
+  .brand-ngo { display: none; }
+
+  .scrolly {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+
+  .phone-col {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 10;
+  }
+
+  .phone-sticky {
+    position: static;
+    height: auto;
+    padding: 16px 0 18px;
+    gap: 12px;
+    background: linear-gradient(
+      to bottom,
+      var(--paper) 0%,
+      var(--paper) 82%,
+      color-mix(in srgb, var(--paper) 0%, transparent) 100%
+    );
+  }
+
+  .phone-caption { font-size: 0.78rem; }
+
+  .steps-col { padding-left: 0; }
+
+  .step {
+    min-height: 56vh;
+    max-width: none;
+    text-align: center;
+    align-items: center;
+  }
+  .step:first-child { min-height: 56vh; }
+  .step-title::after { margin-inline: auto; }
+}
+
+/* —— reduced motion ————————————————————————————————— */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .shot, .step { transition: none; }
+}
